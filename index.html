@@ -1,440 +1,1007 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amber, I have a question...</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amber 🌸
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💛</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #120a0d;
+      --bg-surface: #1a0f13;
+      --bg-elevated: #221419;
+      --gold: #c9a96e;
+      --gold-light: #e8c98a;
+      --gold-muted: rgba(201,169,110,0.15);
+      --gold-glow: rgba(201,169,110,0.25);
+      --rose: #d4849a;
+      --rose-light: #e8a8bb;
+      --rose-muted: rgba(212,132,154,0.15);
+      --rose-glow: rgba(212,132,154,0.25);
+      --cream: #f5ede0;
+      --cream-muted: rgba(245,237,224,0.6);
+      --cream-faint: rgba(245,237,224,0.25);
+      --border: rgba(201,169,110,0.18);
+      --border-strong: rgba(201,169,110,0.35);
+      --text-primary: #f5ede0;
+      --text-secondary: rgba(245,237,224,0.65);
+      --text-muted: rgba(245,237,224,0.35);
+    }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1a0505 0%, #4a0e0e 40%, #8b0000 100%);
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      color: #fff;
       overflow-x: hidden;
     }
 
-    /* Floating sparkles */
-    .sparkles {
+    /* ── AMBIENT BACKGROUND ── */
+    .bg-ambient {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
-      overflow: hidden;
     }
-    .sparkle {
+    .bg-ambient::before {
+      content: '';
       position: absolute;
-      font-size: 18px;
+      top: -20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 80vw;
+      background: radial-gradient(ellipse, rgba(201,169,110,0.07) 0%, transparent 65%);
+    }
+    .bg-ambient::after {
+      content: '';
+      position: absolute;
+      bottom: 10%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(ellipse, rgba(212,132,154,0.08) 0%, transparent 65%);
+    }
+
+    /* ── FLOATING PARTICLES ── */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--gold);
+      border-radius: 50%;
       opacity: 0;
-      animation: floatUp 10s infinite ease-in;
+      animation: float-particle linear infinite;
     }
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
-      15% { opacity: 0.7; }
-      85% { opacity: 0.7; }
-      100% { transform: translateY(-10vh) scale(1.3) rotate(360deg); opacity: 0; }
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 620px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      text-align: center;
+    @keyframes float-particle {
+      0% { opacity: 0; transform: translateY(0) scale(0); }
+      10% { opacity: 0.6; transform: scale(1); }
+      90% { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-100vh) scale(0.5); }
     }
 
-    .intro {
-      margin-top: 30px;
-      opacity: 0;
-      animation: fadeIn 1.5s ease forwards;
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-      from { opacity: 0; transform: translateY(20px); }
-    }
+    /* ── MAIN CONTENT ── */
+    .main { position: relative; z-index: 1; }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #ff6b6b, #ffd700, #ff6b6b);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shine 3s linear infinite;
-    }
-    @keyframes shine {
-      to { background-position: 200% center; }
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: #ff9999;
-      font-weight: 300;
-      margin-bottom: 40px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .date-badge {
-      display: inline-block;
-      background: rgba(220, 20, 60, 0.3);
-      border: 1px solid rgba(220, 20, 60, 0.5);
-      border-radius: 50px;
-      padding: 8px 24px;
-      font-size: 0.95rem;
-      color: #ffcccc;
-      margin-bottom: 25px;
-      backdrop-filter: blur(10px);
-      letter-spacing: 1px;
-    }
-
-    .ask-box {
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(220, 20, 60, 0.25);
-      border-radius: 24px;
-      padding: 40px 30px;
-      margin: 20px 0;
-      opacity: 0;
-      animation: fadeIn 1.5s ease 0.8s forwards;
-    }
-
-    .ask-box p {
-      font-size: 1.15rem;
-      line-height: 1.8;
-      color: #ffe4e1;
-      margin-bottom: 18px;
-    }
-
-    .ask-box .highlight {
-      color: #ff6b6b;
-      font-weight: 600;
-    }
-
-    .ask-box .crimson-accent {
-      color: #dc143c;
-      font-weight: 600;
-    }
-
-    .buttons {
+    /* ── HERO SECTION ── */
+    .hero {
+      min-height: 100vh;
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      margin-top: 30px;
-      flex-wrap: wrap;
+      text-align: center;
+      padding: 40px 24px;
+      position: relative;
     }
 
-    .btn {
-      padding: 14px 40px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.1rem;
-      font-family: 'Poppins', sans-serif;
+    .hero-ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+    }
+    .hero-eyebrow-line {
+      width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+    .hero-eyebrow-line:last-child {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+    .hero-eyebrow span {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
       font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+    }
+
+    .hero-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+    }
+    .hero-heading em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 3vw, 1.6rem);
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.8s forwards;
+    }
+
+    .hero-body {
+      max-width: 520px;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 1.0s forwards;
+    }
+    .hero-body strong { color: var(--cream); font-weight: 500; }
+
+    .cta-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 1.2s forwards;
     }
 
     .btn-yes {
-      background: linear-gradient(135deg, #dc143c, #8b0000);
-      color: white;
-      box-shadow: 0 8px 32px rgba(220, 20, 60, 0.4);
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: #0a0705;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-yes:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 12px 40px rgba(220, 20, 60, 0.6);
+    .btn-yes::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      opacity: 0;
+      transition: opacity 0.2s;
     }
+    .btn-yes { animation: heartbeat 2s ease-in-out infinite; }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.04); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.04); }
+      56% { transform: scale(1); }
+    }
+    .btn-yes:hover { transform: scale(1.05) translateY(-2px) !important; animation: none; box-shadow: 0 12px 40px var(--gold-glow); }
+    .btn-yes:hover::after { opacity: 1; }
 
     .btn-no {
-      background: rgba(255,255,255,0.08);
-      color: #ff9999;
-      border: 1px solid rgba(220, 20, 60, 0.3);
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 16px 32px;
+      border-radius: 4px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
     }
-    .btn-no:hover {
-      background: rgba(255,255,255,0.15);
+    .btn-no:hover { border-color: var(--border-strong); color: var(--text-secondary); }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 1.8s forwards;
+      cursor: pointer;
+    }
+    .scroll-cue span {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
     }
 
-    /* Itinerary section */
-    .itinerary {
-      margin-top: 50px;
-      opacity: 0;
-      display: none;
-      animation: fadeIn 1s ease forwards;
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 24px;
+      max-width: 700px;
+      margin: 0 auto 80px;
     }
-    .itinerary.show {
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-diamond {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ── ITINERARY SECTION ── */
+    .itinerary-section {
+      padding: 80px 24px 120px;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
       display: block;
     }
-
-    .itinerary h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-      color: #ffd700;
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--cream);
+    }
+    .section-title em { font-style: italic; color: var(--gold-light); }
+    .section-subtitle {
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
     }
 
-    .itinerary .subhead {
-      color: #ff9999;
-      font-size: 1rem;
-      margin-bottom: 35px;
-      font-style: italic;
-    }
-
-    .timeline {
-      position: relative;
-      padding-left: 30px;
-      text-align: left;
-    }
+    /* ── TIMELINE ── */
+    .timeline { position: relative; }
     .timeline::before {
       content: '';
       position: absolute;
-      left: 8px;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, #dc143c, #ffd700);
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+      transform: translateX(-50%);
     }
 
-    .event {
-      position: relative;
-      margin-bottom: 32px;
-      padding-left: 25px;
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      gap: 0 24px;
+      margin-bottom: 64px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
     }
-    .event::before {
-      content: '✦';
-      position: absolute;
-      left: -30px;
-      top: 2px;
-      color: #dc143c;
-      font-size: 14px;
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+
+    .timeline-item:nth-child(odd) .tl-card { grid-column: 1; grid-row: 1; }
+    .timeline-item:nth-child(odd) .tl-dot { grid-column: 2; grid-row: 1; }
+    .timeline-item:nth-child(odd) .tl-time { grid-column: 3; grid-row: 1; }
+
+    .timeline-item:nth-child(even) .tl-time { grid-column: 1; grid-row: 1; text-align: right; }
+    .timeline-item:nth-child(even) .tl-dot { grid-column: 2; grid-row: 1; }
+    .timeline-item:nth-child(even) .tl-card { grid-column: 3; grid-row: 1; }
+
+    .tl-dot {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4px;
+    }
+    .tl-dot-inner {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 1px var(--gold), 0 0 16px var(--gold-glow);
+      flex-shrink: 0;
     }
 
-    .event-time {
-      font-size: 0.85rem;
-      color: #ff9999;
+    .tl-time {
+      padding-top: 2px;
+    }
+    .tl-time-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 1;
+      display: block;
+    }
+    .tl-time-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    .event-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-    .event-desc {
-      font-size: 0.95rem;
-      color: #e8c4c4;
-      line-height: 1.6;
-    }
-    .event-tag {
-      display: inline-block;
-      background: rgba(220, 20, 60, 0.2);
-      border: 1px solid rgba(220, 20, 60, 0.3);
-      border-radius: 20px;
-      padding: 3px 12px;
-      font-size: 0.75rem;
-      color: #ff9999;
-      margin-top: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
     }
 
-    .footer-note {
-      margin-top: 45px;
-      font-size: 0.95rem;
-      color: #d8a0a0;
+    .tl-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tl-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    .tl-card-icon {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .tl-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--cream);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .tl-card-desc {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .tl-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-muted);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── CLOSING SECTION ── */
+    .closing-section {
+      text-align: center;
+      padding: 80px 24px 120px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      color: var(--gold);
+      opacity: 0.2;
+      line-height: 0.5;
+      margin-bottom: 24px;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
       font-style: italic;
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .quote-attr {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+
+    .ps-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
       line-height: 1.7;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-surface);
     }
+    .ps-text strong { color: var(--gold); }
 
-    /* No button escape */
-    .btn-no.moving {
+    /* ── YES MODAL ── */
+    .modal-overlay {
       position: fixed;
-    }
-
-    /* Confetti */
-    .confetti {
-      position: fixed;
-      width: 10px; height: 10px;
-      pointer-events: none;
+      inset: 0;
+      background: rgba(5,4,3,0.92);
       z-index: 100;
-      animation: confettiFall 3s ease-out forwards;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      backdrop-filter: blur(12px);
     }
-    @keyframes confettiFall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 16px;
+      padding: 56px 48px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-overlay.open .modal-card { transform: scale(1) translateY(0); }
+
+    .modal-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20%; right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
-    /* Mobile */
-    @media (max-width: 480px) {
-      h1 { font-size: 2.2rem; }
-      .ask-box { padding: 30px 20px; }
-      .btn { padding: 12px 28px; font-size: 1rem; }
-      .itinerary h2 { font-size: 1.7rem; }
+    .modal-emoji { font-size: 3rem; margin-bottom: 24px; display: block; }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 16px;
     }
+    .modal-title em { font-style: italic; color: var(--gold-light); }
+    .modal-body {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 10px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .modal-close:hover { border-color: var(--border-strong); color: var(--text-secondary); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .timeline::before { left: 20px; }
+
+      .timeline-item {
+        grid-template-columns: 40px 1fr;
+        grid-template-rows: auto auto;
+      }
+
+      .timeline-item:nth-child(odd) .tl-dot,
+      .timeline-item:nth-child(even) .tl-dot { grid-column: 1; grid-row: 1; }
+
+      .timeline-item:nth-child(odd) .tl-time,
+      .timeline-item:nth-child(even) .tl-time {
+        grid-column: 2; grid-row: 1;
+        text-align: left;
+      }
+
+      .timeline-item:nth-child(odd) .tl-card,
+      .timeline-item:nth-child(even) .tl-card {
+        grid-column: 2; grid-row: 2;
+      }
+
+      .modal-card { padding: 40px 28px; }
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdown-wrap {
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 1.5s forwards;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .countdown-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .countdown-tiles {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    .countdown-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .countdown-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .countdown-unit {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .countdown-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      opacity: 0.5;
+      margin-bottom: 14px;
+    }
+
+    /* ── HAND-DRAWN DIVIDER ── */
+    .wavy-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 24px;
+      margin: 0 auto 80px;
+      max-width: 700px;
+    }
+    .wavy-divider svg { overflow: visible; }
+
+    /* ── CONFETTI ── */
+    .confetti-piece {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 200;
+      animation: confetti-fall linear forwards;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+    }
+
+    /* ── FISH EASTER EGG ── */
+    .fish-egg { cursor: pointer; display: inline-block; transition: transform 0.2s; }
+    .fish-egg:hover { transform: scale(1.3) rotate(-10deg); }
+    .fish-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-size: 0.9rem;
+      color: var(--cream);
+      z-index: 150;
+      white-space: nowrap;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.4s;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .fish-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
   </style>
 </head>
 <body>
 
-  <div class="sparkles" id="sparkles"></div>
+  <div class="bg-ambient"></div>
+  <div class="particles" id="particles"></div>
 
-  <div class="container">
-    <div class="intro">
-      <h1>Hey Amber</h1>
-      <p class="subtitle">I have something to ask you...</p>
-    </div>
+  <div class="main">
 
-    <div class="ask-box" id="askBox">
-      <div class="date-badge">📅 Saturday or Sunday, July 5–6</div>
+    <!-- ── HERO ── -->
+    <section class="hero" id="hero">
+      <p class="hero-ornament">okay so hear me out 🌸</p>
 
-      <p>
-        I've been thinking... and I'd really love to take you out on a proper <span class="highlight">date</span>.
-      </p>
-      <p>
-        I planned the whole day — sunshine, exotic flavors, and hopefully great company (that's you). <span class="crimson-accent">No fish, I promise.</span> Just good food and better conversation.
-      </p>
-      <p style="font-size: 1.35rem; margin-top: 25px; color: #ffd700; font-family: 'Playfair Display', serif;">
-        Will you go on a date with me?
-      </p>
-
-      <div class="buttons">
-        <button class="btn btn-yes" onclick="sayYes()">Yes, I'd love to 💫</button>
-        <button class="btn btn-no" id="noBtn" onmouseover="dodgeNo()" onclick="dodgeNo()">Hmm, no thanks</button>
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>July 5 – 6 · Sandton</span>
+        <div class="hero-eyebrow-line"></div>
       </div>
-    </div>
 
-    <div class="itinerary" id="itinerary">
-      <h2>Our Day Together ✨</h2>
-      <p class="subhead">Saturday or Sunday, July 5–6 — Sandton & beyond</p>
+      <h1 class="hero-heading">Hi,<br /><em>Amber.</em></h1>
+      <p class="hero-sub">I've been wanting to ask you something.</p>
+
+      <p class="hero-body">
+        So I went and planned a whole day. Couldn't help it.<br /><br />
+        Good food, good vibes, hopefully good company — that's you, obviously. <strong>Zero fish.</strong> I remembered. Will you come?
+      </p>
+
+      <div class="countdown-wrap" id="countdown-wrap">
+        <span class="countdown-label">days until our date 💛</span>
+        <div class="countdown-tiles">
+          <div class="countdown-tile">
+            <div class="countdown-num" id="cd-days">--</div>
+            <span class="countdown-unit">days</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-tile">
+            <div class="countdown-num" id="cd-hours">--</div>
+            <span class="countdown-unit">hrs</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-tile">
+            <div class="countdown-num" id="cd-mins">--</div>
+            <span class="countdown-unit">min</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-tile">
+            <div class="countdown-num" id="cd-secs">--</div>
+            <span class="countdown-unit">sec</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-group">
+        <button class="btn-yes" onclick="openModal()">yes, obviously 💛</button>
+        <button class="btn-no" id="btn-no">hmm, I'm not sure...</button>
+      </div>
+
+      <div class="scroll-cue" onclick="document.getElementById('itinerary').scrollIntoView({behavior:'smooth'})">
+        <span>see what I planned</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ── ITINERARY ── -->
+    <section class="itinerary-section" id="itinerary">
+      <div class="section-header">
+        <span class="section-label">what we're doing</span>
+        <h2 class="section-title">The Day I <em>Planned</em></h2>
+        <p class="section-subtitle">Saturday or Sunday — you pick. Sandton &amp; beyond.</p>
+      </div>
 
       <div class="timeline">
-        <div class="event">
-          <div class="event-time">11:00 AM</div>
-          <div class="event-title">I'll pick you up</div>
-          <div class="event-desc">Looking my best, slightly nervous, very excited. The sun's out and so am I.</div>
-          <span class="event-tag">Daytime vibes</span>
+
+        <div class="timeline-item">
+          <div class="tl-card">
+            <span class="tl-card-icon">🚗</span>
+            <h3 class="tl-card-title">I'll come get you</h3>
+            <p class="tl-card-desc">I'll be ready. Probably too early actually. A little nervous but trying not to show it.</p>
+            <div class="tl-tags"><span class="tl-tag">here we go 🌅</span></div>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-time">
+            <span class="tl-time-value">11:00</span>
+            <span class="tl-time-label">Morning</span>
+          </div>
         </div>
 
-        <div class="event">
-          <div class="event-time">11:30 AM</div>
-          <div class="event-title">Brunch at Embarc</div>
-          <div class="event-desc">African fusion in a sleek, sunlit space. We'll start with something bold — maybe ostrich steak (their specialty) or something equally exotic. Low lighting, high flavor.</div>
-          <span class="event-tag">Exotic • No fish</span>
+        <div class="timeline-item">
+          <div class="tl-time">
+            <span class="tl-time-value">11:30</span>
+            <span class="tl-time-label">Brunch</span>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-card">
+            <span class="tl-card-icon">🍽️</span>
+            <h3 class="tl-card-title">Brunch at Embarc</h3>
+            <p class="tl-card-desc">African fusion, proper sit-down place. They do ostrich steak which sounds wild but apparently it's really good. No fish on the menu, before you ask.</p>
+            <div class="tl-tags">
+              <span class="tl-tag">Exotic</span>
+              <span class="tl-tag">No fish ✓</span>
+            </div>
+          </div>
         </div>
 
-        <div class="event">
-          <div class="event-time">1:30 PM</div>
-          <div class="event-title">Stroll through Sandton City</div>
-          <div class="event-desc">Window shopping, people watching, maybe grab a coffee. Just walking beside you sounds like a good afternoon.</div>
-          <span class="event-tag">Easy & breezy</span>
+        <div class="timeline-item">
+          <div class="tl-card">
+            <span class="tl-card-icon">🛍️</span>
+            <h3 class="tl-card-title">Stroll through Sandton City</h3>
+            <p class="tl-card-desc">Just a walk, honestly. Maybe a coffee. No agenda — I just think walking around with you sounds like a good time.</p>
+            <div class="tl-tags"><span class="tl-tag">no rush ☕</span></div>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-time">
+            <span class="tl-time-value">1:30</span>
+            <span class="tl-time-label">Afternoon</span>
+          </div>
         </div>
 
-        <div class="event">
-          <div class="event-time">3:00 PM</div>
-          <div class="event-title">Sunset cocktails & Caribbean vibes at Brian Lara</div>
-          <div class="event-desc">The only Caribbean spot in Joburg — jerk cauliflower, doubles, sweetcorn fritters, and 2-for-1 tropical cocktails while the afternoon light turns golden. You'll feel like we're on an island.</div>
-          <span class="event-tag">Exotic • Tropical • 2-for-1 drinks</span>
+        <div class="timeline-item">
+          <div class="tl-time">
+            <span class="tl-time-value">3:00</span>
+            <span class="tl-time-label">Cocktail hour</span>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-card">
+            <span class="tl-card-icon">🍹</span>
+            <h3 class="tl-card-title">Cocktails at Brian Lara</h3>
+            <p class="tl-card-desc">Only Caribbean spot in Joburg. They do 2-for-1 cocktails and the food is actually so different — jerk cauliflower, doubles, all of that. It's giving vacation.</p>
+            <div class="tl-tags">
+              <span class="tl-tag">Caribbean</span>
+              <span class="tl-tag">Tropical</span>
+              <span class="tl-tag">2-for-1 🍸</span>
+            </div>
+          </div>
         </div>
 
-        <div class="event">
-          <div class="event-time">5:30 PM</div>
-          <div class="event-title">Late afternoon walk at Nelson Mandela Square</div>
-          <div class="event-desc">Fairy lights flickering on, fountains, maybe some gelato. The kind of walk that makes you not want the day to end.</div>
-          <span class="event-tag">Romantic stroll</span>
+        <div class="timeline-item">
+          <div class="tl-card">
+            <span class="tl-card-icon">✨</span>
+            <h3 class="tl-card-title">Nelson Mandela Square</h3>
+            <p class="tl-card-desc">Evening lights, the fountains, maybe gelato if you want. Mostly just an excuse to keep the day going a little longer.</p>
+            <div class="tl-tags"><span class="tl-tag">✨ golden hour</span></div>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-time">
+            <span class="tl-time-value">5:30</span>
+            <span class="tl-time-label">Golden hour</span>
+          </div>
         </div>
 
-        <div class="event">
-          <div class="event-time">7:00 PM</div>
-          <div class="event-title">I'll take you home</div>
-          <div class="event-desc">Safe, happy, and hopefully already thinking about when we can do this again.</div>
-          <span class="event-tag">Until next time</span>
+        <div class="timeline-item">
+          <div class="tl-time">
+            <span class="tl-time-value">7:00</span>
+            <span class="tl-time-label">Evening</span>
+          </div>
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-card">
+            <span class="tl-card-icon">🌙</span>
+            <h3 class="tl-card-title">I'll take you home</h3>
+            <p class="tl-card-desc">Safe and home before it gets late. Hopefully smiling though.</p>
+            <div class="tl-tags"><span class="tl-tag">until next time 🌙</span></div>
+          </div>
         </div>
+
       </div>
+    </section>
 
-      <p class="footer-note">
-        "The best thing to hold onto in life is each other." — Audrey Hepburn<br><br>
-        (But let's start with brunch first 😊)<br><br>
-        <span style="color: #dc143c;">P.S. — I remembered. No fish. Just you, me, and a day worth remembering.</span>
+    <!-- ── WAVY DIVIDER ── -->
+    <div class="wavy-divider">
+      <svg width="220" height="24" viewBox="0 0 220 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 12 Q18 4 36 12 Q54 20 72 12 Q90 4 108 12 Q126 20 144 12 Q162 4 180 12 Q198 20 216 12" stroke="rgba(201,169,110,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 2 C10 2 12 7 18 7 C12 7 14 13 10 18 C6 13 8 7 2 7 C8 7 10 2 10 2Z" fill="rgba(212,132,154,0.6)" />
+      </svg>
+      <svg width="220" height="24" viewBox="0 0 220 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 12 Q18 20 36 12 Q54 4 72 12 Q90 20 108 12 Q126 4 144 12 Q162 20 180 12 Q198 4 216 12" stroke="rgba(201,169,110,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- ── CLOSING ── -->
+    <section class="closing-section">
+      <div class="quote-mark">"</div>
+      <p class="quote-text">The best thing to hold onto in life is each other.</p>
+      <p class="quote-attr">— Audrey Hepburn</p>
+      <p class="ps-text">
+        <strong>P.S.</strong> — No fish. Not even close to fish. I genuinely remembered and planned around it. <span class="fish-egg" id="fish-egg" title="click me">🐟🚫</span>
       </p>
+    </section>
+
+  </div>
+
+  <!-- ── YES MODAL ── -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-label="Date confirmed">
+    <div class="modal-card">
+      <span class="modal-emoji">💛</span>
+      <h2 class="modal-title">okay I'm actually<br /><em>so happy.</em></h2>
+      <p class="modal-body">
+        
+        Saturday or Sunday — you choose, I'll make it work. Text me? 📅
+      </p>
+      <button class="modal-close" onclick="closeModal()">Close</button>
     </div>
   </div>
 
   <script>
-    // Floating sparkles
-    const sparklesContainer = document.getElementById('sparkles');
-    const sparkleEmojis = ['✨', '💫', '🌙', '💖', '🔥', '💎', '🌹'];
-
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
-      sparkle.style.left = Math.random() * 100 + '%';
-      sparkle.style.animationDuration = (7 + Math.random() * 7) + 's';
-      sparkle.style.animationDelay = Math.random() * 5 + 's';
-      sparkle.style.fontSize = (14 + Math.random() * 18) + 'px';
-      sparklesContainer.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 14000);
+    // ── COUNTDOWN ──
+    function updateCountdown() {
+      // Target: Saturday July 5 2025 11:00 SAST (UTC+2)
+      const target = new Date('2025-07-05T11:00:00+02:00');
+      const now = new Date();
+      let diff = target - now;
+      if (diff < 0) {
+        // already passed — show Sunday July 6
+        const target2 = new Date('2025-07-06T11:00:00+02:00');
+        diff = target2 - now;
+      }
+      if (diff < 0) {
+        document.getElementById('countdown-wrap').innerHTML = '<span class="countdown-label" style="color:var(--rose)">today's the day 🌸</span>';
+        return;
+      }
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)    / 1000);
+      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
     }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
-    setInterval(createSparkle, 700);
-
-    // Confetti
-    function createConfetti() {
-      const colors = ['#dc143c', '#ffd700', '#ff6b6b', '#ff9999', '#fff', '#8b0000'];
-      for (let i = 0; i < 70; i++) {
-        setTimeout(() => {
-          const conf = document.createElement('div');
-          conf.className = 'confetti';
-          conf.style.left = Math.random() * 100 + 'vw';
-          conf.style.top = '-10px';
-          conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-          conf.style.width = (5 + Math.random() * 8) + 'px';
-          conf.style.height = conf.style.width;
-          document.body.appendChild(conf);
-          setTimeout(() => conf.remove(), 3000);
-        }, i * 25);
+    // ── CONFETTI ──
+    function launchConfetti() {
+      const colors = ['#c9a96e','#e8c98a','#d4849a','#e8a8bb','#f5ede0','#fff8f0'];
+      for (let i = 0; i < 90; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.cssText = [
+          'left:' + (Math.random() * 100) + 'vw',
+          'top:-10px',
+          'background:' + colors[Math.floor(Math.random() * colors.length)],
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
+          'width:' + (6 + Math.random() * 6) + 'px',
+          'height:' + (6 + Math.random() * 6) + 'px',
+          'animation-duration:' + (1.8 + Math.random() * 2) + 's',
+          'animation-delay:' + (Math.random() * 0.6) + 's',
+        ].join(';');
+        document.body.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
       }
     }
 
-    // Say Yes!
-    function sayYes() {
-      createConfetti();
-      document.getElementById('askBox').innerHTML = `
-        <p style="font-size: 1.6rem; color: #ffd700; font-family: 'Playfair Display', serif;">
-          She said yes! 🎉
-        </p>
-        <p style="font-size: 1.1rem; margin-top: 15px; color: #ffcccc;">
-          Amber, you just made my whole week. Here's what I planned for us...
-        </p>
-      `;
-      document.getElementById('itinerary').classList.add('show');
-      window.scrollTo({ top: document.getElementById('itinerary').offsetTop - 50, behavior: 'smooth' });
+    // ── FISH EASTER EGG ──
+    const fishEgg = document.getElementById('fish-egg');
+    const fishToast = document.getElementById('fish-toast');
+    let fishTimer;
+    if (fishEgg) {
+      fishEgg.addEventListener('click', () => {
+        fishToast.classList.add('show');
+        clearTimeout(fishTimer);
+        fishTimer = setTimeout(() => fishToast.classList.remove('show'), 3000);
+      });
     }
 
-    // Dodge the No button
-    function dodgeNo() {
-      const btn = document.getElementById('noBtn');
-      const maxX = window.innerWidth - btn.offsetWidth - 40;
-      const maxY = window.innerHeight - btn.offsetHeight - 40;
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
-      btn.style.position = 'fixed';
-      btn.style.left = x + 'px';
-      btn.style.top = y + 'px';
-      const messages = ['Nice try 😏', 'Too slow!', 'Catch me if you can', 'Nope, not today', 'Wrong button!', 'You sure? 🤔', 'Try the other one 😉'];
-      btn.textContent = messages[Math.floor(Math.random() * messages.length)];
+    // ── PARTICLES ──
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.bottom = '-4px';
+      p.style.animationDuration = (8 + Math.random() * 16) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+      p.style.opacity = 0;
+      container.appendChild(p);
     }
+
+    // Timeline scroll reveal
+    const items = document.querySelectorAll('.timeline-item');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    items.forEach(el => obs.observe(el));
+
+    // No button dodge
+    const btnNo = document.getElementById('btn-no');
+    let dodgeCount = 0;
+    btnNo.addEventListener('mouseenter', () => {
+      if (dodgeCount < 4) {
+        const x = (Math.random() - 0.5) * 200;
+        const y = (Math.random() - 0.5) * 100;
+        btnNo.style.transform = `translate(${x}px, ${y}px)`;
+        dodgeCount++;
+      } else {
+        btnNo.textContent = 'okay fine... maybe 🥺';
+        btnNo.style.transform = '';
+      }
+    });
+
+    // Modal
+    function openModal() {
+      launchConfetti();
+      setTimeout(() => {
+        document.getElementById('modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }, 400);
+    }
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
   </script>
 
+  <div class="fish-toast" id="fish-toast">absolutely zero fish. not even a fish-adjacent crumb. 🫡</div>
 </body>
 </html>
