@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amber, I have a question...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a0a2e 0%, #4a1c40 50%, #8b3a5c 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Floating hearts animation */
+    .hearts {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0;
+      animation: floatUp 8s infinite ease-in;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .intro {
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ffd700, #ffb6c1, #ffd700);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3s linear infinite;
+    }
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #ffb6c1;
+      font-weight: 300;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .ask-box {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 40px 30px;
+      margin: 30px 0;
+      opacity: 0;
+      animation: fadeIn 1.5s ease 0.8s forwards;
+    }
+
+    .ask-box p {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      color: #ffe4e1;
+      margin-bottom: 20px;
+    }
+
+    .ask-box .highlight {
+      color: #ffd700;
+      font-weight: 500;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 40px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-yes {
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      color: white;
+      box-shadow: 0 8px 32px rgba(196, 69, 105, 0.4);
+    }
+    .btn-yes:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 40px rgba(196, 69, 105, 0.6);
+    }
+
+    .btn-no {
+      background: rgba(255,255,255,0.1);
+      color: #ffb6c1;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-no:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Itinerary section */
+    .itinerary {
+      margin-top: 50px;
+      opacity: 0;
+      display: none;
+      animation: fadeIn 1s ease forwards;
+    }
+    .itinerary.show {
+      display: block;
+    }
+
+    .itinerary h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #ffd700;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #ffd700, #ff6b9d);
+    }
+
+    .event {
+      position: relative;
+      margin-bottom: 30px;
+      text-align: left;
+      padding-left: 25px;
+    }
+    .event::before {
+      content: '✦';
+      position: absolute;
+      left: -30px;
+      top: 2px;
+      color: #ffd700;
+      font-size: 14px;
+    }
+
+    .event-time {
+      font-size: 0.85rem;
+      color: #ffb6c1;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+    .event-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .event-desc {
+      font-size: 0.95rem;
+      color: #e8d5e0;
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #d8bfd8;
+      font-style: italic;
+    }
+
+    /* No button escape */
+    .btn-no.moving {
+      position: fixed;
+    }
+
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 10px; height: 10px;
+      pointer-events: none;
+      z-index: 100;
+      animation: confettiFall 3s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      h1 { font-size: 2rem; }
+      .ask-box { padding: 30px 20px; }
+      .btn { padding: 12px 30px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="container">
+    <div class="intro">
+      <h1>Hey Amber</h1>
+      <p class="subtitle">I have something to ask you...</p>
+    </div>
+
+    <div class="ask-box" id="askBox">
+      <p>
+        I've been thinking... and I'd really love to take you out on a proper <span class="highlight">date</span>.
+      </p>
+      <p>
+        I planned the whole evening — nothing too much, just soft lights, good food, and hopefully great company (that's you).
+      </p>
+      <p style="font-size: 1.3rem; margin-top: 25px; color: #ffd700; font-family: 'Playfair Display', serif;">
+        Will you go on a date with me?
+      </p>
+
+      <div class="buttons">
+        <button class="btn btn-yes" onclick="sayYes()">Yes, I'd love to 💫</button>
+        <button class="btn btn-no" id="noBtn" onmouseover="dodgeNo()" onclick="dodgeNo()">Hmm, no thanks</button>
+      </div>
+    </div>
+
+    <div class="itinerary" id="itinerary">
+      <h2>Our Evening Together ✨</h2>
+      <div class="timeline">
+        <div class="event">
+          <div class="event-time">6:00 PM</div>
+          <div class="event-title">I'll pick you up</div>
+          <div class="event-desc">Looking my best, slightly nervous, very excited.</div>
+        </div>
+        <div class="event">
+          <div class="event-time">6:30 PM</div>
+          <div class="event-title">Drinks at The Flute Lounge</div>
+          <div class="event-desc">A chic rooftop in Rosebank. Good cocktails, better conversation, and the sunset as our backdrop.</div>
+        </div>
+        <div class="event">
+          <div class="event-time">7:30 PM</div>
+          <div class="event-title">Dinner at Saint Restaurant</div>
+          <div class="event-desc">Award-winning Italian in the heart of Sandton. Wood-fired everything, elegant vibes, and hopefully you'll like what I order.</div>
+        </div>
+        <div class="event">
+          <div class="event-time">9:30 PM</div>
+          <div class="event-title">Stroll through Nelson Mandela Square</div>
+          <div class="event-desc">Fairy lights, fountains, maybe some gelato. The kind of walk that makes you not want the night to end.</div>
+        </div>
+        <div class="event">
+          <div class="event-time">10:30 PM</div>
+          <div class="event-title">I'll take you home</div>
+          <div class="event-desc">Safe, happy, and hopefully already thinking about when we can do this again.</div>
+        </div>
+      </div>
+
+      <p class="footer-note">
+        "The best thing to hold onto in life is each other." — Audrey Hepburn<br><br>
+        (But let's start with dinner first 😊)
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Floating hearts
+    const heartsContainer = document.getElementById('hearts');
+    const heartEmojis = ['💗', '💖', '💝', '💕', '✨', '🌙'];
+    
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDuration = (6 + Math.random() * 6) + 's';
+      heart.style.animationDelay = Math.random() * 5 + 's';
+      heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 12000);
+    }
+    
+    setInterval(createHeart, 800);
+
+    // Confetti
+    function createConfetti() {
+      const colors = ['#ffd700', '#ff6b9d', '#ffb6c1', '#c44569', '#fff'];
+      for (let i = 0; i < 60; i++) {
+        setTimeout(() => {
+          const conf = document.createElement('div');
+          conf.className = 'confetti';
+          conf.style.left = Math.random() * 100 + 'vw';
+          conf.style.top = '-10px';
+          conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+          conf.style.width = (6 + Math.random() * 8) + 'px';
+          conf.style.height = conf.style.width;
+          document.body.appendChild(conf);
+          setTimeout(() => conf.remove(), 3000);
+        }, i * 30);
+      }
+    }
+
+    // Say Yes!
+    function sayYes() {
+      createConfetti();
+      document.getElementById('askBox').innerHTML = `
+        <p style="font-size: 1.5rem; color: #ffd700; font-family: 'Playfair Display', serif;">
+          She said yes! 🎉
+        </p>
+        <p style="font-size: 1.1rem; margin-top: 15px;">
+          Amber, you just made my whole week. Here's what I planned for us...
+        </p>
+      `;
+      document.getElementById('itinerary').classList.add('show');
+      window.scrollTo({ top: document.getElementById('itinerary').offsetTop - 50, behavior: 'smooth' });
+    }
+
+    // Dodge the No button
+    function dodgeNo() {
+      const btn = document.getElementById('noBtn');
+      const maxX = window.innerWidth - btn.offsetWidth - 40;
+      const maxY = window.innerHeight - btn.offsetHeight - 40;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+      btn.style.position = 'fixed';
+      btn.style.left = x + 'px';
+      btn.style.top = y + 'px';
+      btn.textContent = ['Nice try 😏', 'Too slow!', 'Catch me if you can', 'Nope, not today', 'Wrong button!'][Math.floor(Math.random() * 5)];
+    }
+  </script>
+
+</body>
+</html>
