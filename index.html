@@ -41,7 +41,132 @@
       overflow-x: hidden;
     }
 
-    /* AMBIENT */
+    /* ─── LOCK SCREEN ─────────────────────────────────── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: #0a0509;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    #lock-screen.unlocked {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    /* subtle noise */
+    #lock-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    /* ambient glow behind bouquet */
+    #lock-screen::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      width: 320px; height: 320px;
+      background: radial-gradient(ellipse, rgba(212,132,154,0.13) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .lock-from {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s both;
+    }
+
+    .bouquet-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      padding: 0;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.35s both;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bouquet-emoji {
+      font-size: clamp(5rem, 20vw, 7rem);
+      line-height: 1;
+      filter: drop-shadow(0 0 32px rgba(212,132,154,0.4));
+      transition: transform 0.2s cubic-bezier(0.16,1,0.3,1), filter 0.2s;
+      display: block;
+      animation: gentle-float 4s ease-in-out infinite;
+    }
+    @keyframes gentle-float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-10px) rotate(2deg); }
+    }
+    .bouquet-btn:hover .bouquet-emoji,
+    .bouquet-btn:active .bouquet-emoji {
+      transform: scale(1.12);
+      filter: drop-shadow(0 0 48px rgba(212,132,154,0.65));
+      animation: none;
+    }
+
+    .lock-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .lock-hint-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .lock-hint-pulse {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, var(--rose), transparent);
+      animation: hint-pulse 2s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; }
+    }
+
+    .lock-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 10vw, 5rem);
+      font-weight: 300;
+      color: var(--cream);
+      letter-spacing: -0.01em;
+      line-height: 1;
+      position: relative;
+      z-index: 1;
+      margin-top: 56px;
+      animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.5s both;
+    }
+    .lock-name em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    /* ─── AMBIENT ───────────────────────────────────────── */
     .bg-ambient { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .bg-ambient::before {
       content: '';
@@ -59,7 +184,7 @@
       background: radial-gradient(ellipse, rgba(212,132,154,0.08) 0%, transparent 65%);
     }
 
-    /* PARTICLES */
+    /* ─── PARTICLES ─────────────────────────────────────── */
     .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .particle {
       position: absolute;
@@ -76,7 +201,7 @@
 
     .main { position: relative; z-index: 1; }
 
-    /* HERO */
+    /* ─── HERO ──────────────────────────────────────────── */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -142,7 +267,7 @@
     }
     .hero-body strong { color: var(--cream); font-weight: 500; }
 
-    /* COUNTDOWN */
+    /* ─── COUNTDOWN ─────────────────────────────────────── */
     .countdown-wrap {
       margin-bottom: 36px;
       opacity: 0;
@@ -172,7 +297,7 @@
     .countdown-unit { font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
     .countdown-sep { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); opacity: 0.5; margin-bottom: 16px; }
 
-    /* CTA */
+    /* ─── CTA ───────────────────────────────────────────── */
     .cta-group {
       display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
       opacity: 0;
@@ -215,6 +340,7 @@
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
       position: relative;
+      display: inline-block;
     }
     .btn-no:hover { border-color: var(--border-strong); color: var(--text-secondary); }
 
@@ -235,7 +361,7 @@
       0%, 100% { opacity: 0.4; } 50% { opacity: 1; }
     }
 
-    /* ITINERARY */
+    /* ─── ITINERARY ─────────────────────────────────────── */
     .itinerary-section { padding: 80px 24px 120px; max-width: 780px; margin: 0 auto; }
 
     .section-header { text-align: center; margin-bottom: 80px; }
@@ -244,7 +370,7 @@
     .section-title em { font-style: italic; color: var(--gold-light); }
     .section-subtitle { margin-top: 16px; font-size: 0.95rem; color: var(--text-muted); letter-spacing: 0.05em; }
 
-    /* TIMELINE */
+    /* ─── TIMELINE ──────────────────────────────────────── */
     .timeline { position: relative; }
     .timeline::before {
       content: '';
@@ -296,13 +422,13 @@
     .tl-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .tl-tag { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); background: var(--gold-muted); border: 1px solid var(--border); padding: 3px 10px; border-radius: 2px; }
 
-    /* WAVY DIVIDER */
+    /* ─── WAVY DIVIDER ──────────────────────────────────── */
     .wavy-divider {
       display: flex; align-items: center; justify-content: center; gap: 16px;
       padding: 0 24px; margin: 0 auto 80px; max-width: 700px;
     }
 
-    /* CLOSING */
+    /* ─── CLOSING ───────────────────────────────────────── */
     .closing-section { text-align: center; padding: 80px 24px 120px; max-width: 600px; margin: 0 auto; }
     .quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 6rem; color: var(--gold); opacity: 0.2; line-height: 0.5; margin-bottom: 24px; }
     .quote-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.3rem, 3.5vw, 1.8rem); font-weight: 300; color: var(--cream); line-height: 1.5; margin-bottom: 12px; }
@@ -310,7 +436,7 @@
     .ps-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; padding: 24px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-surface); }
     .ps-text strong { color: var(--gold); }
 
-    /* FISH EASTER EGG */
+    /* ─── FISH EASTER EGG ───────────────────────────────── */
     .fish-egg { cursor: pointer; display: inline-block; transition: transform 0.2s; user-select: none; }
     .fish-egg:hover { transform: scale(1.3) rotate(-10deg); }
     .fish-toast {
@@ -330,7 +456,7 @@
     }
     .fish-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-    /* MODAL */
+    /* ─── MODAL ─────────────────────────────────────────── */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(8,4,6,0.92);
@@ -371,7 +497,7 @@
     }
     .modal-close:hover { border-color: var(--border-strong); color: var(--text-secondary); }
 
-    /* CONFETTI */
+    /* ─── CONFETTI ──────────────────────────────────────── */
     .confetti-piece {
       position: fixed; pointer-events: none; z-index: 200; border-radius: 2px;
       animation: confetti-fall linear forwards;
@@ -382,7 +508,7 @@
       100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
 
-    /* ANIMATIONS */
+    /* ─── ANIMATIONS ────────────────────────────────────── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -392,7 +518,7 @@
       * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    /* MOBILE */
+    /* ─── MOBILE ────────────────────────────────────────── */
     @media (max-width: 640px) {
       .timeline::before { left: 20px; }
       .timeline-item {
@@ -412,12 +538,25 @@
 </head>
 <body>
 
+  <!-- ─── LOCK SCREEN ──────────────────────────────────── -->
+  <div id="lock-screen">
+    <p class="lock-from">a message for you</p>
+    <button class="bouquet-btn" id="bouquet-btn" aria-label="Tap to open">
+      <span class="bouquet-emoji">💐</span>
+      <div class="lock-hint">
+        <span class="lock-hint-text">tap to open</span>
+        <div class="lock-hint-pulse"></div>
+      </div>
+    </button>
+    <p class="lock-name">for <em>Amber</em></p>
+  </div>
+
   <div class="bg-ambient"></div>
   <div class="particles" id="particles"></div>
 
   <div class="main">
 
-    <!-- HERO -->
+    <!-- ─── HERO ─────────────────────────────────────────── -->
     <section class="hero" id="hero">
       <p class="hero-ornament">okay so hear me out 🌸</p>
 
@@ -428,14 +567,14 @@
       </div>
 
       <h1 class="hero-heading">Hi,<br /><em>Amber.</em></h1>
-      <p class="hero-sub">I've been wanting to ask you something.</p>
+      <p class="hero-sub">I've been meaning to ask you something.</p>
 
       <p class="hero-body">
-        So I went and planned a whole day. Couldn't help it.<br /><br />
-        Good food, good vibes, hopefully good company — that's you, obviously. <strong>Zero fish.</strong> I remembered. Will you come?
+        So I actually planned a whole day. Couldn't help it.<br /><br />
+        Good food, good conversation, no awkward silences — hopefully. That last part is on you too though. <strong>Zero fish, I promise.</strong> Will you come?
       </p>
 
-      <div class="countdown-wrap">
+      <div class="countdown-wrap" id="countdown-wrap">
         <span class="countdown-label">days until our date 💛</span>
         <div class="countdown-tiles">
           <div class="countdown-tile">
@@ -471,12 +610,12 @@
       </div>
     </section>
 
-    <!-- ITINERARY -->
+    <!-- ─── ITINERARY ─────────────────────────────────────── -->
     <section class="itinerary-section" id="itinerary">
       <div class="section-header">
         <span class="section-label">what we're doing</span>
         <h2 class="section-title">The Day I <em>Planned</em></h2>
-        <p class="section-subtitle">Saturday or Sunday — you pick. Sandton &amp; beyond.</p>
+        <p class="section-subtitle">Saturday or Sunday — your call. Sandton &amp; wherever the day takes us.</p>
       </div>
 
       <div class="timeline">
@@ -485,7 +624,7 @@
           <div class="tl-card">
             <span class="tl-card-icon">🚗</span>
             <h3 class="tl-card-title">I'll come get you</h3>
-            <p class="tl-card-desc">I'll be ready. Probably too early actually. A little nervous but trying not to show it.</p>
+            <p class="tl-card-desc">I'll be on time. Maybe a bit early. Won't admit it though.</p>
             <div class="tl-tags"><span class="tl-tag">here we go 🌅</span></div>
           </div>
           <div class="tl-dot"><div class="tl-dot-inner"></div></div>
@@ -504,9 +643,9 @@
           <div class="tl-card">
             <span class="tl-card-icon">🍽️</span>
             <h3 class="tl-card-title">Brunch at Embarc</h3>
-            <p class="tl-card-desc">African fusion, proper sit-down place. They do ostrich steak which sounds wild but apparently it's really good. No fish on the menu, before you ask.</p>
+            <p class="tl-card-desc">African fusion. Proper sit-down, no rush. They do ostrich steak which sounds a bit much but apparently it's actually really good. No fish anywhere on the menu. Already checked.</p>
             <div class="tl-tags">
-              <span class="tl-tag">Exotic</span>
+              <span class="tl-tag">African Fusion</span>
               <span class="tl-tag">No fish ✓</span>
             </div>
           </div>
@@ -515,8 +654,8 @@
         <div class="timeline-item">
           <div class="tl-card">
             <span class="tl-card-icon">🛍️</span>
-            <h3 class="tl-card-title">Stroll through Sandton City</h3>
-            <p class="tl-card-desc">Just a walk, honestly. Maybe a coffee. No agenda — I just think walking around with you sounds like a good time.</p>
+            <h3 class="tl-card-title">Walk through Sandton City</h3>
+            <p class="tl-card-desc">No real plan here. Just walking around. Maybe stumble into something, maybe not. I think that's the point.</p>
             <div class="tl-tags"><span class="tl-tag">no rush ☕</span></div>
           </div>
           <div class="tl-dot"><div class="tl-dot-inner"></div></div>
@@ -529,17 +668,16 @@
         <div class="timeline-item">
           <div class="tl-time">
             <span class="tl-time-value">3:00</span>
-            <span class="tl-time-label">Cocktail hour</span>
+            <span class="tl-time-label">Dessert stop</span>
           </div>
           <div class="tl-dot"><div class="tl-dot-inner"></div></div>
           <div class="tl-card">
-            <span class="tl-card-icon">🍹</span>
-            <h3 class="tl-card-title">Cocktails at Brian Lara</h3>
-            <p class="tl-card-desc">Only Caribbean spot in Joburg. They do 2-for-1 cocktails and the food is actually so different — jerk cauliflower, doubles, all of that. It's giving vacation.</p>
+            <span class="tl-card-icon">🍦</span>
+            <h3 class="tl-card-title">Dessert at Morelli's</h3>
+            <p class="tl-card-desc">Italian gelato place in Sandton. The kind where you genuinely can't decide and end up getting two scoops anyway. Good problems to have.</p>
             <div class="tl-tags">
-              <span class="tl-tag">Caribbean</span>
-              <span class="tl-tag">Tropical</span>
-              <span class="tl-tag">2-for-1 🍸</span>
+              <span class="tl-tag">Gelato</span>
+              <span class="tl-tag">Too many choices 🍨</span>
             </div>
           </div>
         </div>
@@ -548,26 +686,26 @@
           <div class="tl-card">
             <span class="tl-card-icon">✨</span>
             <h3 class="tl-card-title">Nelson Mandela Square</h3>
-            <p class="tl-card-desc">Evening lights, the fountains, maybe gelato if you want. Mostly just an excuse to keep the day going a little longer.</p>
+            <p class="tl-card-desc">Evening light hits different there. The fountains, the open space. Mostly just an excuse to stretch the day a bit longer.</p>
             <div class="tl-tags"><span class="tl-tag">✨ golden hour</span></div>
           </div>
           <div class="tl-dot"><div class="tl-dot-inner"></div></div>
           <div class="tl-time">
-            <span class="tl-time-value">5:30</span>
+            <span class="tl-time-value">5:00</span>
             <span class="tl-time-label">Golden hour</span>
           </div>
         </div>
 
         <div class="timeline-item">
           <div class="tl-time">
-            <span class="tl-time-value">7:00</span>
+            <span class="tl-time-value">6:30</span>
             <span class="tl-time-label">Evening</span>
           </div>
           <div class="tl-dot"><div class="tl-dot-inner"></div></div>
           <div class="tl-card">
             <span class="tl-card-icon">🌙</span>
             <h3 class="tl-card-title">I'll take you home</h3>
-            <p class="tl-card-desc">Safe and home before it gets late. Hopefully smiling though.</p>
+            <p class="tl-card-desc">Safe, on time, no stress. Hopefully you had a good day. I think I will.</p>
             <div class="tl-tags"><span class="tl-tag">until next time 🌙</span></div>
           </div>
         </div>
@@ -575,7 +713,7 @@
       </div>
     </section>
 
-    <!-- WAVY DIVIDER -->
+    <!-- ─── WAVY DIVIDER ──────────────────────────────────── -->
     <div class="wavy-divider">
       <svg width="200" height="24" viewBox="0 0 200 24" fill="none">
         <path d="M0 12 Q16 4 32 12 Q48 20 64 12 Q80 4 96 12 Q112 20 128 12 Q144 4 160 12 Q176 20 192 12" stroke="rgba(201,169,110,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -588,47 +726,68 @@
       </svg>
     </div>
 
-    <!-- CLOSING -->
+    <!-- ─── CLOSING ────────────────────────────────────────── -->
     <section class="closing-section">
       <div class="quote-mark">"</div>
       <p class="quote-text">The best thing to hold onto in life is each other.</p>
       <p class="quote-attr">— Audrey Hepburn</p>
       <p class="ps-text">
-        <strong>P.S.</strong> — No fish. Not even close to fish. I genuinely remembered and planned around it. <span class="fish-egg" id="fish-egg">🐟🚫</span>
+        <strong>P.S.</strong> — No fish. Not even fish-adjacent. I checked the menus. <span class="fish-egg" id="fish-egg">🐟🚫</span>
       </p>
     </section>
 
   </div>
 
-  <!-- MODAL -->
+  <!-- ─── MODAL ─────────────────────────────────────────── -->
   <div class="modal-overlay" id="modal" role="dialog" aria-modal="true">
     <div class="modal-card">
       <span class="modal-emoji">💛</span>
       <h2 class="modal-title">okay I'm actually<br /><em>so happy.</em></h2>
       <p class="modal-body">
-        Saturday or Sunday — you choose, I'll make it work. Text me? 📅
+        Saturday or Sunday — you pick, I'll make it work. Just text me. 📅
       </p>
       <button class="modal-close" onclick="closeModal()">close</button>
     </div>
   </div>
 
-  <!-- FISH TOAST -->
+  <!-- ─── FISH TOAST ─────────────────────────────────────── -->
   <div class="fish-toast" id="fish-toast">absolutely zero fish. not even a fish-adjacent crumb. 🫡</div>
 
   <script>
-    // COUNTDOWN
+    // LOCK SCREEN UNLOCK
+    var lockScreen = document.getElementById('lock-screen');
+    var bouquetBtn = document.getElementById('bouquet-btn');
+
+    function unlock() {
+      lockScreen.classList.add('unlocked');
+      setTimeout(function() {
+        lockScreen.style.display = 'none';
+      }, 900);
+    }
+
+    bouquetBtn.addEventListener('click', unlock);
+    bouquetBtn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      unlock();
+    });
+
+    // COUNTDOWN — 2026
     function updateCountdown() {
-      var target = new Date('2025-07-05T11:00:00+02:00');
+      var wrapEl = document.getElementById('countdown-wrap');
+      var target = new Date('2026-07-05T11:00:00+02:00');
       var now = new Date();
       var diff = target - now;
+
       if (diff < 0) {
-        var target2 = new Date('2025-07-06T11:00:00+02:00');
-        diff = target2 - now;
+        target = new Date('2026-07-06T11:00:00+02:00');
+        diff = target - now;
       }
+
       if (diff < 0) {
-        document.getElementById('countdown-wrap') && (document.getElementById('countdown-wrap').innerHTML = '<span class="countdown-label" style="color:var(--rose-light)">today\'s the day 🌸</span>');
+        wrapEl.innerHTML = '<span class="countdown-label" style="color:var(--rose-light)">today\'s the day 🌸</span>';
         return;
       }
+
       var days  = Math.floor(diff / 86400000);
       var hours = Math.floor((diff % 86400000) / 3600000);
       var mins  = Math.floor((diff % 3600000)  / 60000);
@@ -665,10 +824,11 @@
     }, { threshold: 0.15 });
     items.forEach(function(el) { obs.observe(el); });
 
-    // NO BUTTON DODGE
+    // NO BUTTON DODGE — works on mouse and touch
     var btnNo = document.getElementById('btn-no');
     var dodgeCount = 0;
-    btnNo.addEventListener('mouseenter', function() {
+
+    function dodgeButton() {
       if (dodgeCount < 4) {
         var x = (Math.random() - 0.5) * 200;
         var y = (Math.random() - 0.5) * 100;
@@ -677,8 +837,18 @@
       } else {
         btnNo.textContent = 'okay fine... maybe 🥺';
         btnNo.style.transform = '';
+        btnNo.removeEventListener('mouseenter', dodgeButton);
+        btnNo.removeEventListener('touchstart', handleTouch);
       }
-    });
+    }
+
+    function handleTouch(e) {
+      e.preventDefault();
+      dodgeButton();
+    }
+
+    btnNo.addEventListener('mouseenter', dodgeButton);
+    btnNo.addEventListener('touchstart', handleTouch, { passive: false });
 
     // CONFETTI
     function launchConfetti() {
